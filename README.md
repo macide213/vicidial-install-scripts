@@ -12,7 +12,6 @@ yum install -y kernel*
 sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config    
 systemctl disable firewalld
 reboot
-
 ````
   Reboot Before running this script
 
