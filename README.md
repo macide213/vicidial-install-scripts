@@ -8,20 +8,18 @@ yum -y install epel-release
 yum update -y
 yum groupinstall 'Development Tools' -y
 yum install git -y
-yum install kernel*
-
-#Disable SELINUX
+yum install -y kernel*
 sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config    
 systemctl disable firewalld
-
 reboot
+
 ````
   Reboot Before running this script
 
 # Install VICIDIAL Now
 
 ```
-git clone https://github.com/jaganthoutam/vicidial-install-scripts.git
+git clone https://github.com/macide213/vicidial-install-scripts.git
 cd vicidial-install-scripts
 ```
 
