@@ -1,8 +1,10 @@
 #!/bin/sh
 
 echo "Vicidial installation Centos7 with WebPhone(WebRTC/SIP.js)"
-
+timedatectl set-timezone America/New_York
 export LC_ALL=C
+export LANG=en_US.UTF-8
+echo "export LANG=en_US.UTF-8" >> ~/.bash_profile
 cat <<MYSQLCONF>> /etc/yum.repos.d/MariaDB.repo
 [mariadb]
 name = MariaDB
@@ -12,7 +14,7 @@ gpgcheck=1
 
 MYSQLCONF
 yum install MariaDB-server MariaDB-client -y
-yum install net-tools openssl openssl-devel make patch gcc perl-Term-ReadLine-Gnu gcc-c++ subversion php php-devel php-gd gd-devel php-mbstring php-mcrypt php-imap php-ldap php-mysql php-odbc php-pear php-xml php-xmlrpc curl curl-devel perl-libwww-perl ImageMagick libxml2 libxml2-devel httpd libpcap libpcap-devel libnet ncurses ncurses-devel screen mysql-devel ntp mutt glibc.i686 wget nano unzip sipsak sox libss7* libopen* openssl libsrtp libsrtp-devel unixODBC unixODBC-devel libtool-ltdl libtool-ltdl-devel -y
+yum install docker net-tools openssl openssl-devel make patch gcc perl-Term-ReadLine-Gnu gcc-c++ subversion php php-devel php-gd gd-devel php-mbstring php-mcrypt php-imap php-ldap php-mysql php-odbc php-pear php-xml php-xmlrpc curl curl-devel perl-libwww-perl ImageMagick libxml2 libxml2-devel httpd libpcap libpcap-devel libnet ncurses ncurses-devel screen mysql-devel ntp mutt glibc.i686 wget nano unzip sipsak sox libss7* libopen* openssl libsrtp libsrtp-devel unixODBC unixODBC-devel libtool-ltdl libtool-ltdl-devel -y
 yum -y install sqlite-devel
 
 yum install mariadb-server mariadb -y
@@ -101,8 +103,10 @@ MYSQLCONF
 systemctl enable httpd.service
 systemctl enable mariadb.service
 systemctl restart httpd.service
+systemctl enable docker.service
+systemctl restart docker.service
 systemctl restart mariadb.service
-
+docker run --restart=always --name vosk -d -p 2700:2700 alphacep/kaldi-en:latest
 #Install Perl Modules
 
 echo "Install Perl"
@@ -287,7 +291,16 @@ make samples
 read -p 'Press Enter to continue: '
 
 echo 'Continuing...'
+cd /usr/src/;
+git clone https://github.com/alphacep/vosk-asterisk.git;
+cd vosk-asterisk/;
+./bootstrap;
+./configure --with-asterisk=/usr --prefix=/usr;
+make;
+make install
+read -p 'Press Enter to continue: '
 
+echo 'Continuing...'
 #Install astguiclient
 echo "Installing astguiclient"
 mkdir /usr/src/astguiclient
