@@ -13,7 +13,7 @@ nameserver 127.0.0.1"> /etc/resolv.conf
 cat <<SNGREPCONF>> /etc/yum.repos.d/sngrep.repo
 [irontec]
 name=Irontec RPMs repository
-baseurl=http://packages.irontec.com/centos/$releasever/$basearch/
+baseurl=http://packages.irontec.com/centos/\$releasever/\$basearch/
 SNGREPCONF
 rpm --import http://packages.irontec.com/public.key
 cat <<MYSQLCONF>> /etc/yum.repos.d/MariaDB.repo
