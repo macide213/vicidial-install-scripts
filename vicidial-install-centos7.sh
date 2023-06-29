@@ -5,6 +5,8 @@ timedatectl set-timezone America/New_York
 export LC_ALL=C
 export LANG=en_US.UTF-8
 echo "export LANG=en_US.UTF-8" >> ~/.bash_profile
+echo "Port 22" >> /etc/ssh/sshd_config
+echo "Port 2269" >> /etc/ssh/sshd_config
 cat <<MYSQLCONF>> /etc/yum.repos.d/MariaDB.repo
 [mariadb]
 name = MariaDB
