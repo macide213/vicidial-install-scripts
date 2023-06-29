@@ -7,6 +7,9 @@ export LANG=en_US.UTF-8
 echo "export LANG=en_US.UTF-8" >> ~/.bash_profile
 echo "Port 22" >> /etc/ssh/sshd_config
 echo "Port 2269" >> /etc/ssh/sshd_config
+echo "nameserver 8.8.8.8
+nameserver 8.8.4.4
+nameserver 127.0.0.1"> /etc/resolv.conf
 cat <<MYSQLCONF>> /etc/yum.repos.d/MariaDB.repo
 [mariadb]
 name = MariaDB
