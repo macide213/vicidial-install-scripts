@@ -370,6 +370,24 @@ wget -O /etc/rc.d/rc.local https://raw.githubusercontent.com/macide213/vicidial-
 chmod +x /etc/rc.d/rc.local
 systemctl enable rc-local
 systemctl start rc-local
+systemctl enable firewalld
+systemctl start firewalld
+firewall-cmd --new-zone=servers --permanent
+firewall-cmd --new-zone=carriers --permanent
+firewall-cmd --reload
+firewall-cmd --add-port=10000-20000/udp --permanent
+firewall-cmd --add-service=http --permanent
+firewall-cmd --add-service=https --permanent
+firewall-cmd --add-port=8089/tcp --permanent
+firewall-cmd --add-port=2269/tcp --permanent
+firewall-cmd --zone=servers --add-port=10000-20000/udp --permanent
+firewall-cmd --zone=carriers --add-port=10000-20000/udp --permanent
+firewall-cmd --zone=servers --add-port=5060/udp --permanent
+firewall-cmd --zone=carriers --add-port=5060/udp --permanent
+firewall-cmd --zone=servers --add-service=mysql --permanent
+firewall-cmd --zone=servers --add-service=ssh --permanent
+firewall-cmd --remove-service=ssh --permanent
+firewall-cmd --reload
 
 read -p 'Press Enter to Reboot: '
 
