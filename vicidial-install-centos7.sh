@@ -10,12 +10,14 @@ echo "Port 2269" >> /etc/ssh/sshd_config
 echo "nameserver 8.8.8.8
 nameserver 8.8.4.4
 nameserver 127.0.0.1"> /etc/resolv.conf
+rm -f /etc/yum.repos.d/sngrep.repo
 cat <<SNGREPCONF>> /etc/yum.repos.d/sngrep.repo
 [irontec]
 name=Irontec RPMs repository
 baseurl=http://packages.irontec.com/centos/\$releasever/\$basearch/
 SNGREPCONF
 rpm --import http://packages.irontec.com/public.key
+rm -f /etc/yum.repos.d/MariaDB.repo
 cat <<MYSQLCONF>> /etc/yum.repos.d/MariaDB.repo
 [mariadb]
 name = MariaDB
