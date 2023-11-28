@@ -1,5 +1,40 @@
 #!/bin/sh
-
+# --copy_sample_conf_files --no-prompt --active_keepalives=$keepalives 123468  X - NO KEEPALIVE PROCESSES (use only if you want none to be keepalive)
+    #  1 - AST_update
+    #  2 - AST_send_listen
+    #  3 - AST_VDauto_dial
+    #  4 - AST_VDremote_agents
+    #  5 - AST_VDadapt (If multi-server system, this must only be on one server)
+    #  6 - FastAGI_log
+    #  7 - AST_VDauto_dial_FILL (only for multi-server, this must only be on one server)
+    #  8 - ip_relay (used for blind agent monitoring)
+    #  9 - Timeclock auto-logout
+    #  C - ConfBridge process, (see the ConfBridge documentation for more info)
+    #  E - Email processor, (If multi-server system, this must only be on one server)
+    #  S - SIP Logger (Patched Asterisk 13 or higher required)
+while getopts "msb" opt; do
+    case $opt in
+    m) master=true ;; # Handle -a
+    s) slave=true ;; # Handle -b argument
+    b) standalone=true ;;
+    \?) ;; # Handle error: unknown option or missing required argument.
+    esac
+done
+if [ $master ]
+then
+ echo master;
+keepalives=57
+fi
+if [ $slave ]
+ then
+ echo slave;
+ keepalives=123468
+fi
+if [ $standalone ]
+ then
+ echo standalone;
+ keepalives=1234578
+fi
 echo "Vicidial installation Centos7 with WebPhone(WebRTC/SIP.js)"
 timedatectl set-timezone America/New_York
 export LC_ALL=C
@@ -28,7 +63,7 @@ gpgcheck=1
 MYSQLCONF
 yum update -y
 yum install MariaDB-server MariaDB-client -y
-yum install docker htop nmap sngrep net-tools openssl openssl-devel make patch gcc perl-Term-ReadLine-Gnu gcc-c++ subversion php php-devel php-gd gd-devel php-mbstring php-mcrypt php-imap php-ldap php-mysql php-odbc php-pear php-xml php-xmlrpc curl curl-devel perl-libwww-perl ImageMagick libxml2 libxml2-devel httpd libpcap libpcap-devel libnet ncurses ncurses-devel screen mysql-devel ntp mutt glibc.i686 wget nano unzip sipsak sox libss7* libopen* openssl libsrtp libsrtp-devel unixODBC unixODBC-devel libtool-ltdl libtool-ltdl-devel -y
+yum install jansson jansson-devel firewalld docker htop nmap sngrep net-tools openssl openssl-devel make patch gcc perl-Term-ReadLine-Gnu gcc-c++ subversion php php-devel php-gd gd-devel php-mbstring php-mcrypt php-imap php-ldap php-mysql php-odbc php-pear php-xml php-xmlrpc curl curl-devel perl-libwww-perl ImageMagick libxml2 libxml2-devel httpd libpcap libpcap-devel libnet ncurses ncurses-devel screen mysql-devel ntp mutt glibc.i686 wget nano unzip sipsak sox libss7* libopen* openssl libsrtp libsrtp-devel unixODBC unixODBC-devel libtool-ltdl libtool-ltdl-devel -y
 yum -y install sqlite-devel
 
 yum install mariadb-server mariadb -y
@@ -259,6 +294,7 @@ wget -O /etc/httpd/conf/httpd.conf https://raw.githubusercontent.com/macide213/v
 
 
 #Install Dahdi
+cd /usr/src
 echo "Install Dahdi"
 yum install dahdi-* -y
 wget http://download.vicidial.com/beta-apps/dahdi-linux-complete-2.11.1.tar.gz
@@ -358,7 +394,7 @@ sed -i s/SERVERIP/"$serveripadd"/g /etc/astguiclient.conf
 
 echo "Install VICIDIAL"
 echo "Copy sample configuration files to /etc/asterisk/ SET TO  Y*"
-perl install.pl
+perl install.pl --copy_sample_conf_files --no-prompt --active_keepalives=$keepalives
 
 #Secure Manager 
 sed -i s/0.0.0.0/127.0.0.1/g /etc/asterisk/manager.conf
@@ -366,7 +402,7 @@ sed -i s/0.0.0.0/127.0.0.1/g /etc/asterisk/manager.conf
 echo "Populate AREA CODES"
 /usr/share/astguiclient/ADMIN_area_code_populate.pl
 echo "Replace OLD IP. You need to Enter your Current IP here"
-/usr/share/astguiclient/ADMIN_update_server_ip.pl --old-server_ip=10.10.10.15
+/usr/share/astguiclient/ADMIN_update_server_ip.pl --old-server_ip=10.10.10.15 --server_ip=$serveripadd --auto
 
 #Install Crontab
 wget -O /root/crontab-file https://raw.githubusercontent.com/macide213/vicidial-install-scripts/main/crontab
