@@ -33,7 +33,7 @@ fi
 if [ $standalone ]
  then
  echo standalone;
- keepalives=1234578
+ keepalives=1234568
 fi
 echo "Vicidial installation Centos7 with WebPhone(WebRTC/SIP.js)"
 timedatectl set-timezone America/New_York
