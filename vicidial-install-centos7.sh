@@ -377,6 +377,8 @@ use asterisk;
 \. /usr/src/astguiclient/trunk/extras/MySQL_AST_CREATE_tables.sql
 \. /usr/src/astguiclient/trunk/extras/first_server_install.sql
 update servers set asterisk_version='13.29.2';
+drop table server_updater;
+CREATE TABLE `server_updater` (   `server_ip` varchar(15) NOT NULL,   `last_update` datetime DEFAULT NULL,   `db_time` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),   UNIQUE KEY `serverip` (`server_ip`) ) ENGINE=MEMORY DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 quit
 MYSQLCREOF
 
