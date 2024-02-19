@@ -56,7 +56,7 @@ rm -f /etc/yum.repos.d/MariaDB.repo
 cat <<MYSQLCONF>> /etc/yum.repos.d/MariaDB.repo
 [mariadb]
 name = MariaDB
-baseurl = http://yum.mariadb.org/10.10/centos7-amd64
+baseurl = http://yum.mariadb.org/10.11/centos7-amd64
 gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
 
